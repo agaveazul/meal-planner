@@ -1,4 +1,3 @@
-
 from langchain_core.prompts import (
     ChatPromptTemplate,
     HumanMessagePromptTemplate,
@@ -11,7 +10,6 @@ from langchain_community.chat_message_histories import StreamlitChatMessageHisto
 from dotenv import load_dotenv
 from tools.sql import run_query_tool, list_tables, describe_tables_tool
 from langchain_community.chat_models import ChatOpenAI
-
 from typing import Any, List, Tuple
 
 tables = list_tables()

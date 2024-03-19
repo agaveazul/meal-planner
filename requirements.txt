@@ -1,0 +1,7 @@
+langchain-core
+langchain
+langchain-community
+python-dotenv
+streamlit
+pyboxen
+pydantic
