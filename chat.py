@@ -1,10 +1,27 @@
 from main import run_llm
 import streamlit as st
-from streamlit_chat import message
 from langchain.schema import HumanMessage, SystemMessage
 from langchain_community.chat_message_histories import StreamlitChatMessageHistory
+from handlers.chat_model_start_handler import ChatModelStartHandler
+from langchain_community.chat_models import ChatOpenAI
 
 st.header("Meal Planner")
+
+openai_api_key = st.sidebar.text_input(
+    label="OpenAI API Key",
+    type="password",
+)
+
+if not openai_api_key:
+    st.info("Please add your OpenAI API key to continue.")
+    st.stop()
+
+handler = ChatModelStartHandler()
+chat = ChatOpenAI(
+    openai_api_key=openai_api_key,
+    callbacks=[handler],
+    model_name="gpt-4"
+)
 
 if 'prompt' not in st.session_state:
     st.session_state['prompt'] = ''
@@ -27,7 +44,7 @@ if len(msgs.messages) == 0 or st.sidebar.button("Reset chat history"):
 if prompt:
     with st.spinner("Generating response..."):
         generated_response = run_llm(
-            query=prompt, chat_history=st.session_state["chat_history"], msgs=msgs
+            query=prompt, chat_history=st.session_state["chat_history"], msgs=msgs, chat=chat
         )
         st.session_state["user_prompt_history"].append(prompt)
         st.session_state["chat_answers_history"].append(generated_response["output"])

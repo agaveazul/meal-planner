@@ -1,4 +1,4 @@
-from langchain_community.chat_models import ChatOpenAI
+
 from langchain_core.prompts import (
     ChatPromptTemplate,
     HumanMessagePromptTemplate,
@@ -10,22 +10,13 @@ from langchain.memory import ConversationBufferMemory
 from langchain_community.chat_message_histories import StreamlitChatMessageHistory
 from dotenv import load_dotenv
 from tools.sql import run_query_tool, list_tables, describe_tables_tool
-from handlers.chat_model_start_handler import ChatModelStartHandler
+from langchain_community.chat_models import ChatOpenAI
+
 from typing import Any, List, Tuple
-
-
-load_dotenv()
-
-
-handler = ChatModelStartHandler()
-chat = ChatOpenAI(
-    callbacks=[handler],
-    model_name="gpt-4"
-)
 
 tables = list_tables()
 
-def run_llm(query: str, msgs: StreamlitChatMessageHistory, chat_history: List[Tuple[str,Any]]=[]) -> Any:
+def run_llm(query: str, msgs: StreamlitChatMessageHistory, chat: ChatOpenAI, chat_history: List[Tuple[str,Any]]=[]) -> Any:
     prompt = ChatPromptTemplate.from_messages(
         [
             SystemMessage(content=(
